@@ -1,0 +1,110 @@
+# ================================
+# AutoFlux — .gitignore
+# Monorepo: backend (Python) + mobile (React Native)
+# ================================
+
+
+# ──────────────────────────────
+# 🤖 Claude / Anthropic
+# ──────────────────────────────
+.claude/
+.claudeignore
+CLAUDE.md
+claude_settings.json
+
+
+# ──────────────────────────────
+# 🐍 Backend — Python / FastAPI
+# ──────────────────────────────
+
+# Variáveis de ambiente (NUNCA sobe)
+backend/.env
+backend/.env.local
+backend/.env.production
+.env
+
+# Ambiente virtual
+backend/.venv/
+backend/venv/
+backend/env/
+.venv/
+venv/
+
+# Cache do Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+
+# Testes / cobertura
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Tipagem
+.mypy_cache/
+.dmypy.json
+
+# Banco de dados local
+*.sqlite
+*.sqlite3
+*.db
+
+# Logs
+*.log
+logs/
+
+# Build / dist
+dist/
+build/
+*.egg-info/
+*.egg
+.eggs/
+
+# Uploads locais
+backend/uploads/
+backend/media/
+
+
+# ──────────────────────────────
+# 📱 Mobile — React Native / Expo
+# ──────────────────────────────
+
+# Dependências
+mobile/node_modules/
+node_modules/
+
+# Expo
+mobile/.expo/
+mobile/dist/
+mobile/web-build/
+mobile/.expo-shared/
+
+# Builds nativos gerados
+mobile/android/
+mobile/ios/
+
+# Variáveis de ambiente mobile
+mobile/.env
+mobile/.env.local
+mobile/.env.production
+
+# Logs npm/yarn
+mobile/npm-debug.log*
+mobile/yarn-debug.log*
+mobile/yarn-error.log*
+
+# Metro bundler
+.metro-health-check*
+
+
+# ──────────────────────────────
+# 🛠️ IDEs e Sistema
+# ──────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
