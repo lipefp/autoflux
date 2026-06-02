@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View, Text, TouchableOpacity, Switch,
-  ScrollView, StyleSheet,
+  ScrollView, StyleSheet, ActivityIndicator,
 } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { colors } from '@/constants/colors';
-import { mockParts } from '@/data/mockParts';
+import { Part } from '@/data/mockParts';
+import { getPartById } from '@/services/api';
 import { useCart } from '@/context/CartContext';
 import Navbar from '@/components/Navbar';
 import BottomNav from '@/components/BottomNav';
@@ -16,10 +17,27 @@ export default function DetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { addToCart } = useCart();
 
-  const part = mockParts.find((p) => p.id === id);
-
+  const [part, setPart]       = useState<Part | undefined>(undefined)
+  const [loading, setLoading] = useState(true)
   const [delivery, setDelivery] = useState(true);
   const [quantity, setQuantity] = useState(1);
+
+  useEffect(() => {
+    if (id) {
+      getPartById(id as string).then(data => {
+        setPart(data)
+        setLoading(false)
+      })
+    }
+  }, [id])
+
+  if (loading) {
+    return (
+      <View style={[styles.container, { alignItems: 'center', justifyContent: 'center' }]}>
+        <ActivityIndicator color={colors.accent} size="large" />
+      </View>
+    )
+  }
 
   if (!part) {
     return (

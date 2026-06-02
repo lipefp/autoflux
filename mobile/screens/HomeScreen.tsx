@@ -1,35 +1,40 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View, Text, FlatList, TouchableOpacity,
-  ScrollView, StyleSheet,
+  ScrollView, StyleSheet, ActivityIndicator,
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { colors } from '@/constants/colors';
-import { mockParts, brands, Part } from '@/data/mockParts';
+import { brands, Part } from '@/data/mockParts';
+import { getParts } from '@/services/api';
 import Navbar from '@/components/Navbar';
 import BottomNav from '@/components/BottomNav';
 import SearchBar from '@/components/SearchBar';
 import PartCard from '@/components/PartCard';
 import { useCart } from '@/context/CartContext';
 
+type SortOption = 'default' | 'price_asc' | 'price_desc' | 'name'
+
 export default function HomeScreen() {
-  const [search, setSearch] = useState('');
-  const [selectedBrand, setSelectedBrand] = useState('Todas');
+  const [parts, setParts]                     = useState<Part[]>([])
+  const [loading, setLoading]                 = useState(true)
+  const [selectedBrand, setSelectedBrand]     = useState('Todas')
+  const [searchQuery, setSearchQuery]         = useState('')
+  const [sortBy, setSortBy]                   = useState<SortOption>('default')
   const { items } = useCart();
 
-  const filteredParts = useMemo<Part[]>(() => {
-    return mockParts.filter((p) => {
-      const matchBrand = selectedBrand === 'Todas' || p.brand === selectedBrand;
-      const matchSearch =
-        search.trim() === '' ||
-        p.name.toLowerCase().includes(search.toLowerCase()) ||
-        p.code.toLowerCase().includes(search.toLowerCase()) ||
-        p.compatible.toLowerCase().includes(search.toLowerCase());
-      return matchBrand && matchSearch;
-    });
-  }, [selectedBrand, search]);
+  const loadParts = useCallback(async () => {
+    setLoading(true)
+    const data = await getParts(selectedBrand, searchQuery)
+    let result = [...data]
+    if (sortBy === 'price_asc')  result.sort((a, b) => a.price - b.price)
+    if (sortBy === 'price_desc') result.sort((a, b) => b.price - a.price)
+    if (sortBy === 'name')       result.sort((a, b) => a.name.localeCompare(b.name))
+    setParts(result)
+    setLoading(false)
+  }, [selectedBrand, searchQuery, sortBy])
 
-  const cartCount = items.reduce((sum, i) => sum + i.quantity, 0);
+  useEffect(() => { loadParts() }, [loadParts])
 
   return (
     <View style={styles.container}>
@@ -42,12 +47,12 @@ export default function HomeScreen() {
       />
 
       <FlatList
-        data={filteredParts}
+        data={parts}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <PartCard part={item} />}
         ListHeaderComponent={
           <View>
-            <SearchBar value={search} onChangeText={setSearch} />
+            <SearchBar value={searchQuery} onChangeText={setSearchQuery} />
 
             {/* Picker de marca — requisito acadêmico */}
             <View style={styles.pickerWrapper}>
@@ -89,15 +94,14 @@ export default function HomeScreen() {
             </ScrollView>
 
             <Text style={styles.sectionLabel}>
-              Peças disponíveis
-              {filteredParts.length !== mockParts.length
-                ? ` (${filteredParts.length})`
-                : ''}
+              Peças disponíveis{parts.length > 0 ? ` (${parts.length})` : ''}
             </Text>
+
+            {loading && <ActivityIndicator color={colors.accent} style={{ marginTop: 20 }} />}
           </View>
         }
         ListEmptyComponent={
-          <Text style={styles.empty}>Nenhuma peça encontrada.</Text>
+          loading ? null : <Text style={styles.empty}>Nenhuma peça encontrada.</Text>
         }
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}

@@ -1,28 +1,49 @@
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import API_URL from '../constants/api'
+import { Part } from '../data/mockParts'
+import { mockParts } from '../data/mockParts'
 
-const API_URL = 'http://localhost:8000';
+async function fetchJSON<T>(url: string): Promise<T> {
+  const res = await fetch(url)
+  if (!res.ok) throw new Error(`HTTP ${res.status}`)
+  return res.json()
+}
 
-const api = axios.create({
-  baseURL: API_URL,
-  headers: { 'Content-Type': 'application/json' },
-  timeout: 10000,
-});
-
-api.interceptors.request.use(async (config) => {
-  const token = await AsyncStorage.getItem('@autoflux:token');
-  if (token) config.headers.Authorization = `Bearer ${token}`;
-  return config;
-});
-
-api.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    if (error.response?.status === 401) {
-      await AsyncStorage.multiRemove(['@autoflux:token', '@autoflux:user']);
-    }
-    return Promise.reject(error);
+export async function getParts(brand?: string, search?: string): Promise<Part[]> {
+  try {
+    const params = new URLSearchParams()
+    if (brand && brand !== 'Todas') params.set('brand', brand)
+    if (search) params.set('search', search)
+    const query = params.toString() ? `?${params}` : ''
+    return await fetchJSON<Part[]>(`${API_URL}/parts${query}`)
+  } catch {
+    // fallback local se API estiver offline
+    return mockParts
   }
-);
+}
 
-export default api;
+export async function getPartById(id: string): Promise<Part | undefined> {
+  try {
+    return await fetchJSON<Part>(`${API_URL}/parts/${id}`)
+  } catch {
+    return mockParts.find(p => p.id === id)
+  }
+}
+
+export interface OrderPayload {
+  items: { partId: string; quantity: number }[]
+  total: number
+  delivery: boolean
+}
+
+export async function createOrder(payload: OrderPayload): Promise<boolean> {
+  try {
+    const res = await fetch(`${API_URL}/orders`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+    return res.ok
+  } catch {
+    return false
+  }
+}

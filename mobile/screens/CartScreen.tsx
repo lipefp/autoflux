@@ -3,8 +3,10 @@ import {
   View, Text, TouchableOpacity, FlatList,
   Alert, StyleSheet,
 } from 'react-native';
+import { router } from 'expo-router';
 import { colors } from '@/constants/colors';
 import { useCart } from '@/context/CartContext';
+import { createOrder } from '@/services/api';
 import Navbar from '@/components/Navbar';
 import BottomNav from '@/components/BottomNav';
 import CartItemComponent from '@/components/CartItem';
@@ -12,17 +14,20 @@ import CartItemComponent from '@/components/CartItem';
 const DELIVERY_FEE = 8.0;
 
 export default function CartScreen() {
-  const { items, total } = useCart();
+  const { items, total, clearCart } = useCart();
 
   const isEmpty = items.length === 0;
   const grandTotal = total + (isEmpty ? 0 : DELIVERY_FEE);
 
-  function handleFinalize() {
-    Alert.alert(
-      'Pedido finalizado!',
-      'Seu pedido foi enviado com sucesso.',
-      [{ text: 'OK' }]
-    );
+  const onFinalize = async () => {
+    await createOrder({
+      items: items.map(i => ({ partId: i.part.id, quantity: i.quantity })),
+      total: total + DELIVERY_FEE,
+      delivery: true,
+    })
+    Alert.alert('Pedido confirmado', `Total: R$ ${(total + DELIVERY_FEE).toFixed(2).replace('.', ',')}`, [
+      { text: 'OK', onPress: () => { clearCart(); router.push('/') } },
+    ])
   }
 
   return (
@@ -74,7 +79,7 @@ export default function CartScreen() {
               </View>
 
               {/* Botão finalizar */}
-              <TouchableOpacity style={styles.finalizeBtn} onPress={handleFinalize}>
+              <TouchableOpacity style={styles.finalizeBtn} onPress={onFinalize}>
                 <Text style={styles.finalizeBtnText}>Finalizar pedido</Text>
               </TouchableOpacity>
             </View>
