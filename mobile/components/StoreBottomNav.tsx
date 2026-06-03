@@ -4,20 +4,20 @@ import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/colors';
 
-export type ActiveTab = 'home' | 'stores' | 'cart' | 'profile';
+export type StoreActiveTab = 'dashboard' | 'catalog' | 'store-orders' | 'store-profile';
 
-interface BottomNavProps {
-  active: ActiveTab;
+interface StoreBottomNavProps {
+  active: StoreActiveTab;
 }
 
-const tabs: { key: ActiveTab; label: string; icon: string; route: string }[] = [
-  { key: 'home',    label: 'Inicio',   icon: 'home-outline',       route: '/home'    },
-  { key: 'stores',  label: 'Lojas',    icon: 'storefront-outline',  route: '/stores'  },
-  { key: 'cart',    label: 'Carrinho', icon: 'cart-outline',        route: '/cart'    },
-  { key: 'profile', label: 'Perfil',   icon: 'person-outline',      route: '/profile' },
+const tabs: { key: StoreActiveTab; label: string; icon: string; route: string }[] = [
+  { key: 'dashboard',    label: 'Painel',   icon: 'grid-outline',        route: '/dashboard'    },
+  { key: 'catalog',      label: 'Catalogo', icon: 'cube-outline',        route: '/catalog'      },
+  { key: 'store-orders', label: 'Pedidos',  icon: 'receipt-outline',     route: '/store-orders' },
+  { key: 'store-profile',label: 'Perfil',   icon: 'person-outline',      route: '/store-profile'},
 ];
 
-export default function BottomNav({ active }: BottomNavProps) {
+export default function StoreBottomNav({ active }: StoreBottomNavProps) {
   return (
     <View style={styles.container}>
       {tabs.map((tab) => {

@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { CartItem as CartItemType, useCart } from '@/context/CartContext';
 import { colors } from '@/constants/colors';
 
@@ -14,7 +15,7 @@ export default function CartItem({ item }: CartItemProps) {
   return (
     <View style={styles.card}>
       <View style={styles.imgBox}>
-        <Text style={styles.emoji}>{part.emoji}</Text>
+        <Ionicons name="settings-outline" size={22} color={colors.textMuted} />
       </View>
 
       <View style={styles.info}>
@@ -24,19 +25,11 @@ export default function CartItem({ item }: CartItemProps) {
       </View>
 
       <View style={styles.qtyRow}>
-        <TouchableOpacity
-          style={styles.qtyBtn}
-          onPress={() => updateQuantity(part.id, quantity - 1)}
-        >
-          <Text style={styles.qtyBtnText}>−</Text>
+        <TouchableOpacity style={styles.qtyBtn} onPress={() => updateQuantity(part.id, quantity - 1)}>
+          <Text style={styles.qtyBtnText}>-</Text>
         </TouchableOpacity>
-
         <Text style={styles.qty}>{quantity}</Text>
-
-        <TouchableOpacity
-          style={styles.qtyBtn}
-          onPress={() => updateQuantity(part.id, quantity + 1)}
-        >
+        <TouchableOpacity style={styles.qtyBtn} onPress={() => updateQuantity(part.id, quantity + 1)}>
           <Text style={styles.qtyBtnText}>+</Text>
         </TouchableOpacity>
       </View>
@@ -57,33 +50,18 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
   },
   imgBox: {
-    width: 44,
-    height: 44,
-    borderRadius: 8,
+    width: 44, height: 44, borderRadius: 8,
     backgroundColor: colors.imgPlaceholder,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 12,
+    alignItems: 'center', justifyContent: 'center', marginRight: 12,
   },
-  emoji: { fontSize: 22 },
   info: { flex: 1 },
   name: { fontSize: 14, fontWeight: '600', color: colors.textDark },
   store: { fontSize: 12, color: colors.textMuted, marginTop: 2 },
   price: { fontSize: 14, fontWeight: '600', color: colors.accent, marginTop: 4 },
-  qtyRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    marginLeft: 8,
-  },
+  qtyRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginLeft: 8 },
   qtyBtn: {
-    width: 28,
-    height: 28,
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: colors.border,
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: 28, height: 28, borderRadius: 6, borderWidth: 1,
+    borderColor: colors.border, alignItems: 'center', justifyContent: 'center',
     backgroundColor: colors.background,
   },
   qtyBtnText: { fontSize: 16, color: colors.textDark, fontWeight: '600', lineHeight: 20 },

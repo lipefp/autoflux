@@ -3,6 +3,7 @@ import {
   View, Text, TouchableOpacity, Switch,
   ScrollView, StyleSheet, ActivityIndicator,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import { colors } from '@/constants/colors';
 import { Part } from '@/data/mockParts';
@@ -70,7 +71,7 @@ export default function DetailScreen() {
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
         {/* Imagem hero */}
         <View style={styles.heroBox}>
-          <Text style={styles.heroEmoji}>{part.emoji}</Text>
+          <Ionicons name="settings-outline" size={52} color={colors.textMuted} />
         </View>
 
         {/* Cabeçalho da peça */}
@@ -178,9 +179,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  heroEmoji: { fontSize: 52 },
-
-  section: { paddingHorizontal: 16, paddingVertical: 14, backgroundColor: colors.white },
+section: { paddingHorizontal: 16, paddingVertical: 14, backgroundColor: colors.white },
   divider: { height: 8, backgroundColor: colors.background },
 
   partName: { fontSize: 15, fontWeight: '600', color: colors.textDark },

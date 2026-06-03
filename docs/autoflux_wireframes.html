@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutoFlux — Wireframes das Telas</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #f0f0f0;
+    color: #111;
+    padding: 40px 20px;
+  }
+
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 12px;
+    padding: 48px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid #0D1B2A;
+    padding-bottom: 20px;
+    margin-bottom: 32px;
+  }
+
+  .header-left .logo {
+    font-size: 28px;
+    font-weight: 600;
+    color: #0D1B2A;
+    letter-spacing: 2px;
+  }
+
+  .header-left .logo span { color: #F4801A; }
+
+  .header-right {
+    text-align: right;
+    font-size: 12px;
+    color: #666;
+    line-height: 1.8;
+  }
+
+  .doc-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #0D1B2A;
+    margin-bottom: 6px;
+  }
+
+  .doc-subtitle {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 32px;
+  }
+
+  .screens-grid {
+    display: flex;
+    gap: 28px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+
+  .screen-wrap { display: flex; flex-direction: column; align-items: center; }
+
+  .screen-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #555;
+    margin-top: 10px;
+    letter-spacing: 0.5px;
+  }
+
+  /* Phone frame */
+  .phone {
+    width: 210px;
+    border-radius: 32px;
+    border: 2.5px solid #0D1B2A;
+    background: #f4f5f7;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  }
+
+  .status-bar {
+    background: #0D1B2A;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+  }
+  .status-bar span { color: #fff; font-size: 9px; }
+
+  .navbar {
+    background: #0D1B2A;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .navbar .logo-text { color: #F4801A; font-size: 15px; font-weight: 600; letter-spacing: 1px; }
+  .navbar .icon { color: #fff; font-size: 16px; }
+  .navbar .nav-title { color: #fff; font-size: 12px; font-weight: 500; }
+
+  .screen-body { background: #f4f5f7; min-height: 390px; }
+
+  /* Shared components */
+  .search-box {
+    margin: 10px 10px 8px;
+    background: #fff;
+    border-radius: 8px;
+    padding: 7px 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid #e0e0e0;
+    font-size: 9px;
+    color: #aaa;
+  }
+
+  .section-title { font-size: 10px; font-weight: 600; color: #333; padding: 4px 10px 4px; }
+
+  .picker-row { margin: 0 10px 8px; display: flex; gap: 5px; flex-wrap: wrap; }
+  .picker-chip {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 3px 9px;
+    font-size: 9px;
+    color: #555;
+  }
+  .picker-chip.active { background: #F4801A; color: #fff; border-color: #F4801A; }
+
+  .part-card {
+    background: #fff;
+    margin: 0 10px 7px;
+    border-radius: 10px;
+    padding: 8px;
+    border: 1px solid #eee;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .part-img {
+    width: 44px;
+    height: 44px;
+    background: #e8eaf0;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: #aaa;
+  }
+  .part-info { flex: 1; }
+  .part-name { font-size: 10px; font-weight: 500; color: #222; }
+  .part-store { font-size: 9px; color: #888; }
+  .part-price { font-size: 11px; font-weight: 600; color: #F4801A; }
+  .part-btn {
+    background: #F4801A;
+    border-radius: 6px;
+    padding: 5px 8px;
+    font-size: 13px;
+    color: #fff;
+  }
+
+  .bottom-nav {
+    background: #fff;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0 12px;
+  }
+  .nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  .nav-item .ni { font-size: 17px; color: #bbb; }
+  .nav-item .ni.active { color: #F4801A; }
+  .nav-item span { font-size: 7.5px; color: #bbb; }
+  .nav-item span.active { color: #F4801A; }
+
+  /* Detail screen */
+  .detail-hero {
+    background: #e8eaf0;
+    height: 118px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 52px;
+    color: #bbb;
+  }
+  .detail-body { background: #fff; padding: 10px 12px; }
+  .detail-name { font-size: 13px; font-weight: 600; color: #111; }
+  .detail-store { font-size: 9px; color: #888; margin-top: 2px; }
+  .detail-price { font-size: 18px; font-weight: 600; color: #F4801A; margin: 8px 0 4px; }
+  .divider { height: 1px; background: #eee; margin: 8px 0; }
+  .detail-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
+  .detail-row .lbl { font-size: 9px; color: #888; }
+  .detail-row .val { font-size: 9px; color: #333; font-weight: 500; }
+  .switch-row { display: flex; justify-content: space-between; align-items: center; margin: 6px 0; }
+  .switch-row .sw-lbl { font-size: 9px; color: #555; }
+  .switch-pill { width: 28px; height: 15px; background: #F4801A; border-radius: 10px; position: relative; }
+  .switch-dot { width: 11px; height: 11px; background: #fff; border-radius: 50%; position: absolute; top: 2px; right: 2px; }
+  .add-btn {
+    background: #F4801A;
+    border-radius: 8px;
+    padding: 9px;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  /* Cart screen */
+  .cart-item {
+    background: #fff;
+    margin: 0 10px 6px;
+    border-radius: 8px;
+    padding: 8px;
+    border: 1px solid #eee;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .cart-img {
+    width: 36px;
+    height: 36px;
+    background: #e8eaf0;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: #aaa;
+  }
+  .cart-info { flex: 1; }
+  .cart-name { font-size: 9px; font-weight: 500; color: #222; }
+  .cart-store { font-size: 8px; color: #888; }
+  .cart-price { font-size: 10px; font-weight: 600; color: #F4801A; }
+  .qty-ctrl { display: flex; align-items: center; gap: 5px; }
+  .qty-btn {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    background: #f4f5f7;
+    border: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: #555;
+  }
+  .qty-num { font-size: 10px; font-weight: 600; color: #222; }
+  .cart-summary {
+    background: #fff;
+    margin: 0 10px;
+    border-radius: 8px;
+    padding: 10px 12px;
+    border: 1px solid #eee;
+  }
+  .summary-row { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 9px; }
+  .summary-row .s-lbl { color: #888; }
+  .summary-row .s-val { color: #333; }
+  .summary-total { display: flex; justify-content: space-between; margin-top: 8px; padding-top: 6px; border-top: 1px solid #eee; }
+  .summary-total .t-lbl { font-size: 10px; font-weight: 500; color: #111; }
+  .summary-total .t-val { font-size: 12px; font-weight: 600; color: #F4801A; }
+  .checkout-btn {
+    background: #F4801A;
+    border-radius: 8px;
+    padding: 9px;
+    text-align: center;
+    margin: 8px 10px 0;
+    font-size: 10px;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  /* Components table */
+  .section-heading {
+    font-size: 16px;
+    font-weight: 600;
+    color: #0D1B2A;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1.5px solid #F4801A;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 32px;
+  }
+  thead tr { background: #0D1B2A; }
+  thead th { color: #fff; padding: 10px 14px; text-align: left; font-weight: 500; font-size: 12px; }
+  tbody tr:nth-child(even) { background: #f9f9f9; }
+  tbody td { padding: 9px 14px; color: #333; border-bottom: 1px solid #eee; vertical-align: top; }
+  tbody td:first-child { font-weight: 500; color: #0D1B2A; }
+
+  .badge {
+    display: inline-block;
+    background: #FFF0E5;
+    color: #C85A00;
+    font-size: 10px;
+    font-weight: 500;
+    border-radius: 4px;
+    padding: 2px 7px;
+    margin-right: 4px;
+  }
+
+  .footer {
+    border-top: 1px solid #eee;
+    padding-top: 16px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #aaa;
+  }
+
+  @media print {
+    body { background: #fff; padding: 0; }
+    .page { box-shadow: none; border-radius: 0; padding: 32px; max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <div class="logo">AUTO<span>FLUX</span></div>
+    </div>
+    <div class="header-right">
+      <div>Modelagem do App — Wireframes</div>
+      <div>Entrega: 12/05/2026</div>
+      <div>Disciplina: Desenvolvimento Mobile · React Native</div>
+    </div>
+  </div>
+
+  <div class="doc-title">Protótipo de Telas — AutoFlux</div>
+  <div class="doc-subtitle">Wireframes das 3 telas principais do aplicativo marketplace de autopeças</div>
+
+  <!-- Screens -->
+  <div class="screens-grid">
+
+    <!-- TELA 1: HOME -->
+    <div class="screen-wrap">
+      <div class="phone">
+        <div class="status-bar"><span>9:41</span><span>● ● ●</span></div>
+        <div class="navbar">
+          <span class="logo-text">AutoFlux</span>
+          <span class="icon">🔔</span>
+        </div>
+        <div class="screen-body">
+          <div class="search-box">🔍 Buscar peça ou veículo...</div>
+          <div class="section-title">Filtrar por marca</div>
+          <div class="picker-row">
+            <div class="picker-chip active">Todas</div>
+            <div class="picker-chip">Honda</div>
+            <div class="picker-chip">Toyota</div>
+            <div class="picker-chip">VW</div>
+          </div>
+          <div class="section-title">Peças disponíveis</div>
+          <div class="part-card">
+            <div class="part-img">⚙️</div>
+            <div class="part-info">
+              <div class="part-name">Filtro de óleo Bosch</div>
+              <div class="part-store">AutoCenter SP</div>
+              <div class="part-price">R$ 45,90</div>
+            </div>
+            <div class="part-btn">+</div>
+          </div>
+          <div class="part-card">
+            <div class="part-img">🛞</div>
+            <div class="part-info">
+              <div class="part-name">Pastilha de freio Fras-le</div>
+              <div class="part-store">Peças Rápidas RJ</div>
+              <div class="part-price">R$ 89,00</div>
+            </div>
+            <div class="part-btn">+</div>
+          </div>
+          <div class="part-card">
+            <div class="part-img">🔩</div>
+            <div class="part-info">
+              <div class="part-name">Vela de ignição NGK</div>
+              <div class="part-store">MotoPartes NIT</div>
+              <div class="part-price">R$ 32,00</div>
+            </div>
+            <div class="part-btn">+</div>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><span class="ni active">🏠</span><span class="active">Início</span></div>
+          <div class="nav-item"><span class="ni">🔍</span><span>Buscar</span></div>
+          <div class="nav-item"><span class="ni">🛒</span><span>Carrinho</span></div>
+          <div class="nav-item"><span class="ni">👤</span><span>Perfil</span></div>
+        </div>
+      </div>
+      <div class="screen-label">Tela 1 — Home</div>
+    </div>
+
+    <!-- TELA 2: DETALHE -->
+    <div class="screen-wrap">
+      <div class="phone">
+        <div class="status-bar"><span>9:41</span><span>● ● ●</span></div>
+        <div class="navbar">
+          <span class="icon">←</span>
+          <span class="nav-title">Detalhe da peça</span>
+          <span class="icon">↗</span>
+        </div>
+        <div class="screen-body" style="background:#fff;">
+          <div class="detail-hero">⚙️</div>
+          <div class="detail-body">
+            <div class="detail-name">Filtro de óleo Bosch</div>
+            <div class="detail-store">🏪 AutoCenter SP · 2,3 km</div>
+            <div class="detail-price">R$ 45,90</div>
+            <div class="divider"></div>
+            <div class="detail-row"><span class="lbl">Compatível com</span><span class="val">Honda Civic 2018-23</span></div>
+            <div class="detail-row"><span class="lbl">Código</span><span class="val">BOX-3330</span></div>
+            <div class="detail-row"><span class="lbl">Estoque</span><span class="val">12 unidades</span></div>
+            <div class="divider"></div>
+            <div class="switch-row">
+              <span class="sw-lbl">Entrega em domicílio</span>
+              <div class="switch-pill"><div class="switch-dot"></div></div>
+            </div>
+            <div style="font-size:9px; color:#F4801A; margin-bottom:4px;">Entrega em até 2h · R$ 8,00</div>
+            <div class="add-btn">Adicionar ao carrinho</div>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><span class="ni">🏠</span><span>Início</span></div>
+          <div class="nav-item"><span class="ni">🔍</span><span>Buscar</span></div>
+          <div class="nav-item"><span class="ni active">🛒</span><span class="active">Carrinho</span></div>
+          <div class="nav-item"><span class="ni">👤</span><span>Perfil</span></div>
+        </div>
+      </div>
+      <div class="screen-label">Tela 2 — Detalhe da peça</div>
+    </div>
+
+    <!-- TELA 3: CARRINHO -->
+    <div class="screen-wrap">
+      <div class="phone">
+        <div class="status-bar"><span>9:41</span><span>● ● ●</span></div>
+        <div class="navbar">
+          <span class="logo-text" style="font-size:13px; color:#fff; letter-spacing:0;">Carrinho</span>
+          <span class="icon">🗑</span>
+        </div>
+        <div class="screen-body">
+          <div style="height:8px;"></div>
+          <div class="cart-item">
+            <div class="cart-img">⚙️</div>
+            <div class="cart-info">
+              <div class="cart-name">Filtro de óleo Bosch</div>
+              <div class="cart-store">AutoCenter SP</div>
+              <div class="cart-price">R$ 45,90</div>
+            </div>
+            <div class="qty-ctrl">
+              <div class="qty-btn">−</div>
+              <span class="qty-num">1</span>
+              <div class="qty-btn">+</div>
+            </div>
+          </div>
+          <div class="cart-item">
+            <div class="cart-img">🔩</div>
+            <div class="cart-info">
+              <div class="cart-name">Vela de ignição NGK</div>
+              <div class="cart-store">MotoPartes NIT</div>
+              <div class="cart-price">R$ 32,00</div>
+            </div>
+            <div class="qty-ctrl">
+              <div class="qty-btn">−</div>
+              <span class="qty-num">2</span>
+              <div class="qty-btn">+</div>
+            </div>
+          </div>
+          <div style="height:8px;"></div>
+          <div class="cart-summary">
+            <div class="summary-row"><span class="s-lbl">Subtotal</span><span class="s-val">R$ 109,90</span></div>
+            <div class="summary-row"><span class="s-lbl">Entrega</span><span class="s-val">R$ 8,00</span></div>
+            <div class="summary-total"><span class="t-lbl">Total</span><span class="t-val">R$ 117,90</span></div>
+          </div>
+          <div class="checkout-btn">Finalizar pedido</div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><span class="ni">🏠</span><span>Início</span></div>
+          <div class="nav-item"><span class="ni">🔍</span><span>Buscar</span></div>
+          <div class="nav-item"><span class="ni active">🛒</span><span class="active">Carrinho</span></div>
+          <div class="nav-item"><span class="ni">👤</span><span>Perfil</span></div>
+        </div>
+      </div>
+      <div class="screen-label">Tela 3 — Carrinho</div>
+    </div>
+
+  </div>
+
+  <!-- Components table -->
+  <div class="section-heading">Componentes React Native utilizados</div>
+  <table>
+    <thead>
+      <tr>
+        <th>Tela</th>
+        <th>Componente obrigatório</th>
+        <th>Uso no AutoFlux</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Home</td>
+        <td><span class="badge">Image</span></td>
+        <td>Logo do AutoFlux na navbar e fotos das peças</td>
+      </tr>
+      <tr>
+        <td>Home</td>
+        <td><span class="badge">Picker</span></td>
+        <td>Filtro de marca do veículo (Todas / Honda / Toyota / VW)</td>
+      </tr>
+      <tr>
+        <td>Home</td>
+        <td><span class="badge">Text</span></td>
+        <td>Nome da peça, nome da loja, preço — todos estilizados</td>
+      </tr>
+      <tr>
+        <td>Detalhe</td>
+        <td><span class="badge">Button</span></td>
+        <td>"Adicionar ao carrinho" — altera o state do carrinho</td>
+      </tr>
+      <tr>
+        <td>Detalhe</td>
+        <td><span class="badge">Switch</span></td>
+        <td>Alternar entre entrega em domicílio e retirada na loja</td>
+      </tr>
+      <tr>
+        <td>Carrinho</td>
+        <td><span class="badge">useState</span></td>
+        <td>Controle de quantidade de itens e cálculo do total em tempo real</td>
+      </tr>
+      <tr>
+        <td>Todas</td>
+        <td><span class="badge">View</span> <span class="badge">StyleSheet</span></td>
+        <td>Estrutura e estilização de todas as telas</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="footer">
+    <span>AutoFlux · Projeto Integrador — React Native</span>
+    <span>Modelagem do App · Entrega 12/05/2026</span>
+  </div>
+
+</div>
+</body>
+</html>

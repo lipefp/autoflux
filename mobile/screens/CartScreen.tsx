@@ -21,12 +21,12 @@ export default function CartScreen() {
 
   const onFinalize = async () => {
     await createOrder({
-      items: items.map(i => ({ partId: i.part.id, quantity: i.quantity })),
-      total: total + DELIVERY_FEE,
+      items: items.map(i => ({ partId: i.part.id, name: i.part.name, price: i.part.price, quantity: i.quantity })),
+      subtotal: total,
       delivery: true,
     })
     Alert.alert('Pedido confirmado', `Total: R$ ${(total + DELIVERY_FEE).toFixed(2).replace('.', ',')}`, [
-      { text: 'OK', onPress: () => { clearCart(); router.push('/') } },
+      { text: 'OK', onPress: () => { clearCart(); router.replace('/home'); } },
     ])
   }
 

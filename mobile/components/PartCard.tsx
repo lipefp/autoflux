@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { Part } from '@/data/mockParts';
 import { useCart } from '@/context/CartContext';
@@ -23,7 +24,7 @@ export default function PartCard({ part }: PartCardProps) {
   return (
     <TouchableOpacity style={styles.card} onPress={handlePress} activeOpacity={0.85}>
       <View style={styles.imgBox}>
-        <Text style={styles.emoji}>{part.emoji}</Text>
+        <Ionicons name="settings-outline" size={22} color={colors.textMuted} />
       </View>
 
       <View style={styles.info}>
@@ -60,7 +61,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginRight: 12,
   },
-  emoji: { fontSize: 22 },
   info: { flex: 1 },
   name: { fontSize: 14, fontWeight: '600', color: colors.textDark },
   store: { fontSize: 12, color: colors.textMuted, marginTop: 2 },

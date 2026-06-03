@@ -10,4 +10,7 @@ export const colors = {
   textMuted:      '#888888',
   textLight:      '#AAAAAA',
   imgPlaceholder: '#E8EAF0',
+  success:        '#22C55E',
+  warning:        '#F59E0B',
+  danger:         '#EF4444',
 };

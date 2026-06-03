@@ -1,16 +1,16 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { router } from 'expo-router';
-import api from '@/services/api';
+import API_URL from '@/constants/api';
 
-type UserRole = 'cliente' | 'lojista' | 'admin';
+export type UserRole = 'client' | 'store';
 
-interface User {
+export interface User {
   id: number;
   name: string;
   email: string;
   role: UserRole;
   phone?: string;
+  store_id?: string | null;
 }
 
 interface SignUpData {
@@ -20,15 +20,21 @@ interface SignUpData {
   phone: string;
   role: UserRole;
   cnpj?: string;
+  storeName?: string;
+  address?: string;
+  district?: string;
+  city?: string;
+  hours?: string;
 }
 
 interface AuthContextData {
   user: User | null;
   token: string | null;
-  isLoading: boolean;
-  signIn: (email: string, password: string) => Promise<void>;
+  role: UserRole | null;
+  loading: boolean;
+  signIn: (email: string, password: string) => Promise<User>;
   signOut: () => Promise<void>;
-  signUp: (data: SignUpData) => Promise<void>;
+  signUp: (data: SignUpData) => Promise<User>;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -36,62 +42,94 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadStoredAuth();
+    (async () => {
+      try {
+        const [storedToken, storedUser] = await AsyncStorage.multiGet([
+          '@autoflux:token',
+          '@autoflux:user',
+        ]);
+        if (storedToken[1] && storedUser[1]) {
+          setToken(storedToken[1]);
+          setUser(JSON.parse(storedUser[1]));
+        }
+      } catch {
+        // ignore storage errors
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, []);
 
-  async function loadStoredAuth() {
-    try {
-      const [storedToken, storedUser] = await AsyncStorage.multiGet([
-        '@autoflux:token',
-        '@autoflux:user',
-      ]);
-      if (storedToken[1] && storedUser[1]) {
-        setToken(storedToken[1]);
-        setUser(JSON.parse(storedUser[1]));
-      }
-    } catch {
-      // ignore
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  async function signIn(email: string, password: string) {
-    const formData = new URLSearchParams();
-    formData.append('username', email);
-    formData.append('password', password);
-
-    const response = await api.post('/auth/login', formData.toString(), {
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+  async function signIn(email: string, password: string): Promise<User> {
+    const res = await fetch(`${API_URL}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
     });
-
-    const { access_token, user: userData } = response.data;
-
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.detail || 'Email ou senha incorretos');
+    }
+    const data = await res.json();
+    // Django DRF returns { token, role, user, store_id }
+    const userData: User = {
+      ...data.user,
+      role: data.role,
+      store_id: data.store_id ?? null,
+    };
     await AsyncStorage.multiSet([
-      ['@autoflux:token', access_token],
+      ['@autoflux:token', data.token],
       ['@autoflux:user', JSON.stringify(userData)],
     ]);
-
-    setToken(access_token);
+    setToken(data.token);
     setUser(userData);
+    return userData;
   }
 
-  async function signOut() {
+  async function signOut(): Promise<void> {
     await AsyncStorage.multiRemove(['@autoflux:token', '@autoflux:user']);
     setToken(null);
     setUser(null);
-    router.replace('/');
   }
 
-  async function signUp(data: SignUpData) {
-    await api.post('/auth/register', data);
+  async function signUp(data: SignUpData): Promise<User> {
+    const res = await fetch(`${API_URL}/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.detail || 'Erro ao criar conta');
+    }
+    const resp = await res.json();
+    const userData: User = {
+      ...resp.user,
+      role: resp.role,
+      store_id: resp.store_id ?? null,
+    };
+    await AsyncStorage.multiSet([
+      ['@autoflux:token', resp.token],
+      ['@autoflux:user', JSON.stringify(userData)],
+    ]);
+    setToken(resp.token);
+    setUser(userData);
+    return userData;
   }
 
   return (
-    <AuthContext.Provider value={{ user, token, isLoading, signIn, signOut, signUp }}>
+    <AuthContext.Provider value={{
+      user,
+      token,
+      role: user?.role ?? null,
+      loading,
+      signIn,
+      signOut,
+      signUp,
+    }}>
       {children}
     </AuthContext.Provider>
   );
