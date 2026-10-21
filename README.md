@@ -130,4 +130,4 @@ Abra no **Expo Go** (celular) ou em um emulador.
 
 ## 👤 Autor
 
-**Felipe Diniz** · [GitHub](https://github.com/lipefp) · [LinkedIn](https://www.linkedin.com/in/felipe-diniz-39237b288)
+**Felipe Diniz** · [GitHub](https://github.com/lipefp) · [LinkedIn](https://www.linkedin.com/in/felipe-diniz1)
