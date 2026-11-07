@@ -1,5 +1,5 @@
 import API_URL from '../constants/api'
-import { Part, mockParts } from '../data/mockParts'
+import type { Part } from '../data/mockParts'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export type { Part } from '../data/mockParts'
@@ -41,10 +41,7 @@ export async function getParts(brand?: string, search?: string, storeId?: string
     const query = params.toString() ? `?${params}` : ''
     return await fetchJSON<Part[]>(`${API_URL}/parts${query}`)
   } catch {
-    let result = [...mockParts]
-    if (brand && brand !== 'Todas') result = result.filter(p => p.brand === brand)
-    if (search) result = result.filter(p => p.name.toLowerCase().includes(search.toLowerCase()))
-    return result
+    return []
   }
 }
 
@@ -52,7 +49,7 @@ export async function getPartById(id: string): Promise<Part | undefined> {
   try {
     return await fetchJSON<Part>(`${API_URL}/parts/${id}`)
   } catch {
-    return mockParts.find(p => p.id === id)
+    return undefined
   }
 }
 
